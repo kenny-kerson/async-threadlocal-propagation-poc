@@ -1,8 +1,10 @@
 package com.kenny.poc.atp.context;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NamedInheritableThreadLocal;
 import org.springframework.core.NamedThreadLocal;
 
+@Slf4j
 public class ContextHolder {
 
     private static final ThreadLocal<Context> threadLocalContext = new NamedThreadLocal<>("Thread Local Context");
@@ -38,4 +40,11 @@ public class ContextHolder {
         return inheritableThreadLocalContext.get();
     }
 
+    /*
+     * ThreadLocal에 담겨있는 Context 객체를 출력한다
+     */
+    public static void printLog() {
+        log.warn("# threadLocalContext : {}", threadLocalContext.get().toString());
+        log.warn("# inheritableThreadLocalContext : {}", inheritableThreadLocalContext.get().toString());
+    }
 }
