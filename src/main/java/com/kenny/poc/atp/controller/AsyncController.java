@@ -17,7 +17,7 @@ public class AsyncController {
     private final AsyncService asyncService;
 
     @GetMapping("/async/threadlocal/{userId}/{guid}")
-    public void getAsyncThreadLocal( @PathVariable final String userId, @PathVariable final String guid ) {
+    public void getAsyncThreadLocal( @PathVariable final String userId, @PathVariable final String guid ) throws InterruptedException {
         log.warn("# Controller getAsyncThreadLocal() Start!!");
 
         try {
@@ -30,6 +30,10 @@ public class AsyncController {
 
             ContextHolder.printLog();
             asyncService.asyncProcess();
+
+            // @Async로 실행되는 asyncProcess()가 끝나고, 메인 쓰레드의 쓰레드로컬값은 그대로 유지되는지 확인하기 위해 슬립처리함
+            Thread.sleep(2000L);
+            ContextHolder.printLog();
 
         } catch( Exception e ) {
             throw e;

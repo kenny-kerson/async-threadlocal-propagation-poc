@@ -19,10 +19,24 @@ public class ContextHolder {
     }
 
     /*
-     * Context를 ThreadLocal에 set한다
+     * Context를 ThreadLocal, InheritableThreadLocalContext에 set한다
      */
     public static void setContext( final Context context ) {
         threadLocalContext.set(context);
+        inheritableThreadLocalContext.set(context);
+    }
+
+    /*
+     * Context를 ThreadLocal에 set한다
+     */
+    public static void setThreadLocalContext( final Context context ) {
+        threadLocalContext.set(context);
+    }
+
+    /*
+     * Context를 ThreadLocal에 set한다
+     */
+    public static void setInheritableThreadLocalContext( final Context context ) {
         inheritableThreadLocalContext.set(context);
     }
 

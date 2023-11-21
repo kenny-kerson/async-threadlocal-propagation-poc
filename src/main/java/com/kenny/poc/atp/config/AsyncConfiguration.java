@@ -22,6 +22,8 @@ public class AsyncConfiguration implements AsyncConfigurer {
         executor.setMaxPoolSize(100);
         executor.setQueueCapacity(10000);
         executor.setThreadNamePrefix("async-thread-");
+        // ThreadLocal 전파를 위한 데코레이터 클래스 설정
+        executor.setTaskDecorator(new ContextPropagationDecorator());
         executor.initialize();
         return executor;
     }
