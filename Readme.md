@@ -39,6 +39,38 @@ Out of Scope
 ---
 
 ## Solution
+### @Async에서 ThreadLocal 전파하기 
+#### 1. InheritableThreadLocal 사용하기
+InheritableThreadLocal이란?
+- 비동기 쓰레드 생성시, 원본 쓰레드의 쓰레드로컬을 전파해주는 쓰레드로컬
+- 별도의 설정을 하지 않아도 전파할 수 있어서 간편
+- 전파과정이 없어서 명시적이지 않은 단점이 있음
+- 사용한 이후에 자원에 대한 정리가 필수 
+- Spring MVC RequestContextHolder에서도 사용하는 방식
+
+InheritableThreadLocal 로컬 생성하기
+![11.png](img%2F11.png)
+
+InheritableThreadLocal 비동기 쓰레드 전파 확인하기
+1) 비동기 쓰레드에서 ThreadLocal 로그 출력
+![12.png](img%2F12.png)
+2) 별도의 작업을 하지 않아도 원본 쓰레드와 동일한 쓰레드로컬값이 출력됨
+![13.png](img%2F13.png)
+
+
+#### 2. ThreadLocal & TaskDecorator 사용하기
+1) TaskDecorator 생성하기
+![21.png](img%2F21.png)
+2) ThreadPoolTaskExecutor에 Decorator 추가하기
+![21.png](img%2F22.png)
+3) 원본 쓰레드와 동일한 쓰레드로컬값이 출력됨
+![13.png](img%2F13.png)
+
+#### 3. 테스트해보기
+1) Application 기동
+2) api.http 파일의 GET http://localhost:8080/async/threadlocal/kenny/202311211025000 실행
+
+### kafka pub/sub에서 ThreadLocal 전파하기
 - TBD
 
 ---
