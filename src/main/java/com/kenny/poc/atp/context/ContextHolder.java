@@ -21,7 +21,7 @@ public class ContextHolder {
      */
     public static void setContext( final Context context ) {
         threadLocalContext.set(context);
-        inheritableThreadLocalContext.set(context);ˆ
+        inheritableThreadLocalContext.set(context);
     }
 
     /*
