@@ -1,7 +1,7 @@
 package com.kenny.poc.atp.consumer;
 
-import com.kenny.poc.atp.event.CommonMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class KafkaConsumer {
 
     @KafkaListener(topics = {"defaultTopic"}, groupId = "common-message-group")
-    public void subscribe(final CommonMessage commonMessage ) {
-        log.warn("# sub : {}", commonMessage);
+    public void subscribe(final ConsumerRecord<?, ?> record) {
+        log.warn("# sub : {}", record);
     }
 }

@@ -1,13 +1,15 @@
 package com.kenny.poc.atp.event;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommonMessage {
 
-    private final LocalDateTime curruentDateTime;
+    private String yyyymmdd;
 }

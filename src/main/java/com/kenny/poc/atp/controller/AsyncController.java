@@ -1,5 +1,6 @@
 package com.kenny.poc.atp.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kenny.poc.atp.context.Context;
 import com.kenny.poc.atp.context.ContextHolder;
 import com.kenny.poc.atp.service.AsyncService;
@@ -17,7 +18,7 @@ public class AsyncController {
     private final AsyncService asyncService;
 
     @GetMapping("/async/threadlocal/{userId}/{guid}")
-    public void getAsyncThreadLocal( @PathVariable final String userId, @PathVariable final String guid ) throws InterruptedException {
+    public void getAsyncThreadLocal( @PathVariable final String userId, @PathVariable final String guid ) throws InterruptedException, JsonProcessingException {
         log.warn("# Controller getAsyncThreadLocal() Start!!");
 
         try {
