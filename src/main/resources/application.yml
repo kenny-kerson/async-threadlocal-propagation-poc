@@ -4,11 +4,15 @@ spring:
     # Producer 설정
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     # Consumer 설정
     consumer:
       bootstrap-servers: localhost:29092
       group-id: common-message-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        # JsonDeserializer가 역직렬화를 수행할 수 있는 패키지들의 모음
+        # 이 값이 셋팅 안되어 있으면, 보안적인 이유로 역직렬화시 오류가 발생함
+        spring.json.trusted.packages: com.kenny.poc.atp.event

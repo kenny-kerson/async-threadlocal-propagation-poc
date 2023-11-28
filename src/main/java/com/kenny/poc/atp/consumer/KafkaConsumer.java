@@ -1,5 +1,6 @@
 package com.kenny.poc.atp.consumer;
 
+import com.kenny.poc.atp.event.CommonMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -14,7 +15,7 @@ public class KafkaConsumer {
     // TODO : consumer 처리 오류시 몇번까지 retry 하는지, 그 이후에는 어떻게 되는지 확인
     // TODO : kafka의 현재 offset이 어떻게 되는지 확인하는 방법
     @KafkaListener(topics = {"defaultTopic"}, groupId = "common-message-group")
-    public void subscribe(final ConsumerRecord<String, String> record) {
-        log.warn("# sub : {}", record);
+    public void subscribe(final ConsumerRecord<String, CommonMessage> record) {
+        log.warn("# sub : {}", record.value());
     }
 }
