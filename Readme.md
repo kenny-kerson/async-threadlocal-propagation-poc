@@ -39,7 +39,7 @@ Out of Scope
 ---
 
 ## Solution
-### @Async에서 ThreadLocal 전파하기 
+### 1️⃣ @Async에서 ThreadLocal 전파하기 
 #### 1. InheritableThreadLocal 사용하기
 InheritableThreadLocal이란?
 - 비동기 쓰레드 생성시, 원본 쓰레드의 쓰레드로컬을 전파해주는 쓰레드로컬
@@ -70,8 +70,34 @@ InheritableThreadLocal 비동기 쓰레드 전파 확인하기
 1) Application 기동
 2) api.http 파일의 GET http://localhost:8080/async/threadlocal/kenny/202311211025000 실행
 
-### kafka pub/sub에서 ThreadLocal 전파하기
-- TBD
+---
+
+### 2️⃣ kafka pub/sub에서 ThreadLocal 전파하기
+#### 방법
+1. payload에 threadlocal에 해당하는 item들도 포함하여 pub / sub하기
+2. 반복되는 데이터는 kafka header를 통해 pub하고, consumer에서는 Before Aspect에서 threadlocal로 생성하기 
+
+#### 선택
+- 2번 선택 
+- 관심사를 분리 / payload는 compact하게 유지 / 중복된 코드를 제거를 위해 선택함 
+
+#### 구현
+1) Producer에서 kafka로 send할때, ProducerRecord 객체의 RecordHeader를 이용해 context를 담는다. 이때, payload는 value에 별도로 담긴다( payload는 매번 바뀌지만, header는 항상 동일한 구성의 context를 가져와서 셋팅함 )
+![3-1.png](img%2F3-1.png)
+2) Consumer에서는 payload로 전달받은 객체를 매개변수로 받는다. 이 때, context는 이미 셋팅되어 있다
+![3-3.png](img%2F3-3.png)
+3) Consumer Aspect의 Before 포인트컷에서 kafka header를 읽어서 이 쓰레드의 context를 만든다
+![3-4.png](img%2F3-4.png)
+4) 사용한 threadlocal 자원은 After 시점에 정리한다
+![3-5.png](img%2F3-5.png)
+
+#### 테스트
+1) Application 기동
+2) api.http 파일의 GET http://localhost:8080/async/threadlocal/kenny/202311211025000 실행
+   
+
+![3-6.png](img%2F3-6.png)
+Consumer에서 threadlocal을 생성하고, 자원을 정리한 로그를 확인할 수 있다
 
 ---
 
