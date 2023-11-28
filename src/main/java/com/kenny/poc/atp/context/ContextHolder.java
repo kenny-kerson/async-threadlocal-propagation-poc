@@ -57,8 +57,8 @@ public class ContextHolder {
     /*
      * ThreadLocal에 담겨있는 Context 객체를 출력한다
      */
-    public static void printLog() {
-        log.warn("# threadLocalContext : {}", threadLocalContext.get().toString());
-        log.warn("# inheritableThreadLocalContext : {}", inheritableThreadLocalContext.get().toString());
+    public static void printLog( final String methodName ) {
+        log.warn("# [{}] threadLocalContext : {}", methodName, threadLocalContext.get().toString());
+        log.warn("# [{}] inheritableThreadLocalContext : {}", methodName, inheritableThreadLocalContext.get().toString());
     }
 }

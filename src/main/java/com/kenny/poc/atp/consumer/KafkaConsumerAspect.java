@@ -8,10 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.Joinpoint;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.*;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -22,26 +20,22 @@ public class KafkaConsumerAspect {
 
     private final ObjectMapper objectMapper;
 
-    @Before("@annotation(org.springframework.kafka.annotation.KafkaListener)")
-    public void beforeKafkaConsumer(Joinpoint jp, ConsumerRecord<?, ?> record) throws JsonProcessingException {
+    // @Before에서 args를 기술하지 않으면 인스펙션 waring 발생
+    // args까지 정확히 기술해야 AOP가 적용되는 메서드 시그니처를 정확히 찾을 수 있음
+    @Before("@annotation(org.springframework.kafka.annotation.KafkaListener) && args(record,..)")
+    public void beforeKafkaConsumer(final ConsumerRecord<String, String> record) throws JsonProcessingException {
         final String contextString = new String(record.headers().lastHeader("context").value());
         log.warn("# beforeKafkaConsumer : {}", contextString);
 
         final Context context = objectMapper.readValue(contextString, Context.class);
 
         ContextHolder.setContext(context);
-        ContextHolder.printLog();
+        ContextHolder.printLog("beforeKafkaConsumer");
     }
 
     @After("@annotation(org.springframework.kafka.annotation.KafkaListener)")
     public void afterKafkaConsumer() {
         log.warn("# afterKafkaConsumer : 자원을 정리한다" );
-        ContextHolder.resetContexts();
-    }
-
-    @AfterThrowing("@annotation(org.springframework.kafka.annotation.KafkaListener)")
-    public void afterThrowingKafkaConsumer() {
-        log.warn("# afterThrowingKafkaConsumer : 자원을 정리한다" );
         ContextHolder.resetContexts();
     }
 }
