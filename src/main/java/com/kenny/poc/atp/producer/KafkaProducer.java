@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class KafkaProducer {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, CommonMessage> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
     public void sendMessage( final String topic, final CommonMessage payload ) throws JsonProcessingException {
@@ -25,7 +25,7 @@ public class KafkaProducer {
         final Context inheritableThreadLocalContext = ContextHolder.getInheritableThreadLocalContext();
 
         // kafka에 전달할 record 생성 & context를 header에 넣기
-        final ProducerRecord<String, String> producerRecord = new ProducerRecord<>(topic, objectMapper.writeValueAsString(payload));
+        final ProducerRecord<String, CommonMessage> producerRecord = new ProducerRecord<>(topic, payload);
         producerRecord.headers().add(new RecordHeader("context", objectMapper.writeValueAsString(inheritableThreadLocalContext).getBytes()));
 
         // kafka에 비동기로 send
