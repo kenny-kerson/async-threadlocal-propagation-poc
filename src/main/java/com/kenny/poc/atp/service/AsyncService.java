@@ -21,7 +21,7 @@ public class AsyncService {
     @Async
     public void asyncProcess() throws JsonProcessingException {
         log.warn("# asyncProcess Start!!!");
-        ContextHolder.printLog();
+        ContextHolder.printLog("asyncProcess");
 
         kafkaProducer.sendMessage("defaultTopic", new CommonMessage("20231127"));
     }

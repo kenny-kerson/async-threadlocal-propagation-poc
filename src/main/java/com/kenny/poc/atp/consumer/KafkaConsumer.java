@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class KafkaConsumer {
 
     @KafkaListener(topics = {"defaultTopic"}, groupId = "common-message-group")
-    public void subscribe(final ConsumerRecord<?, ?> record) {
+    public void subscribe(final ConsumerRecord<String, String> record) {
         log.warn("# sub : {}", record);
     }
 }
